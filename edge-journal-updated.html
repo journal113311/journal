@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edge Journal — Futures Trading Diary</title>
+<script src="https://accounts.google.com/gsi/client" async></script>
+<style>
+:root{--bg:#0d1118;--panel:#151c27;--panel2:#1b2532;--line:#2a3748;--text:#e8edf4;--muted:#93a2b5;--accent:#75a7ff;--green:#54c69a;--red:#f07878;--yellow:#e7bd69;--radius:14px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:9px 13px;border-radius:10px}button:hover{border-color:var(--accent)}button.primary{background:var(--accent);color:#08111f;border-color:var(--accent);font-weight:700}button.danger{color:var(--red)}button.ghost{background:transparent}.app{max-width:1440px;margin:auto;padding:22px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:12px}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#75a7ff,#54c69a);display:grid;place-items:center;color:#07111d;font-weight:900}.brand h1{font-size:18px;margin:0}.brand p{margin:1px 0 0;color:var(--muted);font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}.tabs{display:flex;gap:7px;margin-bottom:18px;flex-wrap:wrap}.tab{background:transparent;color:var(--muted)}.tab.active{background:var(--panel2);color:var(--text);border-color:#49658a}.view{display:none}.view.active{display:block}.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:17px;margin-bottom:14px}.card h2,.card h3{margin:0 0 13px}.card h2{font-size:17px}.card h3{font-size:14px}.muted{color:var(--muted)}.small{font-size:12px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{display:flex;align-items:center;justify-content:space-between;gap:12px}.grid{display:grid;gap:12px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.field{display:flex;flex-direction:column;gap:5px;min-width:0}.field label{color:var(--muted);font-size:12px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:9px;background:#0f1620;color:var(--text);padding:9px 10px;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}textarea{min-height:88px;resize:vertical}.field textarea.tall{min-height:130px}.section-title{display:flex;align-items:center;gap:9px;margin:22px 0 12px}.section-title span{font-size:11px;color:var(--accent);letter-spacing:.12em;font-weight:800}.section-title h3{margin:0;font-size:15px}.calendar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.calendar-head h2{margin:0;font-size:19px}.calendar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) minmax(0,.85fr);gap:7px}
+.weekcell{min-height:92px;border:1px solid var(--line);border-radius:11px;background:#131c2b;padding:8px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;text-align:center}
+.weekcell .wk-label{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.weekcell .wk-pnl{font-size:15px;font-weight:800}
+.weekcell .wk-count{font-size:10px;color:var(--muted)}
+.dow.wk-dow{color:var(--accent);font-weight:700}.dow{text-align:center;color:var(--muted);font-size:11px;padding:5px}.day{min-height:92px;border:1px solid var(--line);border-radius:11px;background:#111924;padding:8px;text-align:left;display:flex;flex-direction:column;gap:5px}.day:hover{border-color:var(--accent)}.day.dim{opacity:.35}.day.today{outline:1px solid var(--accent)}.daynum{font-weight:700}.daymeta{font-size:10px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px}.dot.done{background:var(--green)}.dot.plan{background:var(--yellow)}.dot.loss{background:var(--red)}.pnl{font-weight:700}.positive{color:var(--green)}.negative{color:var(--red)}.metric{padding:14px;border-radius:12px;background:#101721;border:1px solid var(--line)}.metric .v{font-size:22px;font-weight:750;margin-top:3px}.metric .l{font-size:11px;color:var(--muted)}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.toolbar input,.toolbar select{background:#0f1620;color:var(--text);border:1px solid var(--line);padding:9px;border-radius:9px}.trade{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0;background:#101721}.trade-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.trade-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:10px}.trade-grid .field input,.trade-grid .field select{padding:7px}.note{display:grid;grid-template-columns:105px 1fr auto;gap:8px;align-items:start;margin:9px 0}.note input,.note textarea{background:#0f1620;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px;width:100%}.note textarea{min-height:55px}.images{display:flex;gap:9px;flex-wrap:wrap;margin-top:8px}.imgbox{width:130px;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#0d131c}.imgbox img{width:100%;height:85px;object-fit:cover;display:block}.premarket-gallery .imgbox{width:min(100%,720px)}.premarket-gallery .imgbox img{height:auto;max-height:520px;object-fit:contain;background:#080d14}.premarket-gallery .imgbox div{font-size:12px;padding:8px}.trade-gallery .imgbox{width:min(100%,720px)}.trade-gallery .imgbox img{height:auto;max-height:520px;object-fit:contain;background:#080d14}.trade-gallery .imgbox div{font-size:12px;padding:8px}.trade-minimal{grid-template-columns:repeat(3,minmax(0,1fr))}.partial-check{margin-top:12px}.imgbox div{padding:5px;font-size:11px;overflow-wrap:anywhere}.imgbox button{width:100%;border-radius:0;border:0;border-top:1px solid var(--line);padding:5px}.status{font-size:11px;color:var(--muted)}.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}.hidden{display:none!important}.footer{color:var(--muted);font-size:11px;text-align:center;padding:20px}.checkline{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.checkline input{accent-color:var(--accent)}.pill{display:inline-block;padding:3px 8px;border:1px solid var(--line);border-radius:99px;color:var(--muted);font-size:11px}
+.pastezone{border:1.5px dashed var(--line);border-radius:11px;padding:12px 14px;margin-top:10px;text-align:center;cursor:text;outline:none;transition:border-color .15s,background .15s}
+.pastezone:hover{border-color:#49658a}
+.pastezone:focus,.pastezone.active{border-color:var(--accent);background:#101a28}
+.pastezone .pz-title{font-size:12.5px;font-weight:700;color:var(--text)}
+.pastezone.active .pz-title{color:var(--accent)}
+.pastezone .pz-sub{margin-top:6px;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+.pastezone input[type=file]{max-width:220px}
+.pz-flash{animation:pzflash .5s ease}
+@keyframes pzflash{0%{background:#1c3a2c;border-color:var(--green)}100%{background:transparent}}
+.imgbox img{cursor:zoom-in}
+.lightbox{position:fixed;inset:0;background:rgba(6,9,14,.92);z-index:1000;display:none;flex-direction:column;backdrop-filter:blur(2px)}
+.lightbox.open{display:flex}
+.lightbox-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;flex:0 0 auto}
+.lightbox-bar .lb-name{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lightbox-bar .lb-controls{display:flex;gap:6px;align-items:center}
+.lightbox-bar button{background:var(--panel2);color:var(--text)}
+.lightbox-stage{flex:1;overflow:hidden;position:relative;cursor:grab;touch-action:none}
+.lightbox-stage.grabbing{cursor:grabbing}
+.lightbox-stage img{position:absolute;top:50%;left:50%;max-width:none;max-height:none;user-select:none;-webkit-user-drag:none;image-rendering:auto;will-change:transform}
+.lightbox-hint{text-align:center;color:var(--muted);font-size:11px;padding:8px 0 14px;flex:0 0 auto}
+@media(max-width:600px){.lightbox-bar{padding:10px 12px}.lb-name{font-size:11px}}
+.banner{border-radius:12px;padding:13px 15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.banner-warn{background:#2a2112;border:1px solid #5a4620;color:#e7bd69}
+.banner-ok{background:#122a20;border:1px solid #255a3f;color:var(--green)}
+.banner strong{font-weight:700}
+.streak-up{color:var(--green)}.streak-down{color:var(--red)}
+details.setup summary{cursor:pointer;user-select:none}
+details.setup ol{padding-left:18px;margin:8px 0 0}
+details.setup li{margin:4px 0}
+details.setup code{background:#0f1620;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:11px}
+@media(max-width:850px){.grid.four{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:repeat(2,1fr)}.trade-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.app{padding:12px}.top{align-items:flex-start;flex-direction:column}.grid.two,.grid.three,.grid.four{grid-template-columns:1fr}.day{min-height:65px;padding:5px}.daymeta{display:none}.note{grid-template-columns:80px 1fr}.note button{grid-column:2}.calendar{gap:3px}}
+</style>
+</head>
+<body>
+<div class="lightbox" id="lightbox">
+ <div class="lightbox-bar">
+  <div class="lb-name" id="lbName"></div>
+  <div class="lb-controls">
+   <button id="lbZoomOut" title="Zoom out">−</button>
+   <button id="lbZoomReset" title="Reset zoom">100%</button>
+   <button id="lbZoomIn" title="Zoom in">＋</button>
+   <button id="lbClose" title="Close (Esc)">✕ Close</button>
+  </div>
+ </div>
+ <div class="lightbox-stage" id="lbStage">
+  <img id="lbImg" src="" alt="">
+ </div>
+ <div class="lightbox-hint">Scroll or pinch to zoom · drag to pan · double-click to reset · Esc to close</div>
+</div>
+<div class="app">
+<header class="top">
+ <div class="brand"><div class="logo">E</div><div><h1>Edge Journal</h1><p>NQ · New York session · offline trading diary</p></div></div>
+ <div class="actions"><button id="exportBtn">Export backup</button><button id="importBtn">Import backup</button><input id="importFile" type="file" accept="application/json" class="hidden"><button class="primary" id="todayBtn">＋ Today’s journal</button></div>
+</header>
+<nav class="tabs">
+ <button class="tab active" data-view="calendar">Calendar</button><button class="tab" data-view="day">Daily journal</button><button class="tab" data-view="history">History</button><button class="tab" data-view="stats">Overview</button><button class="tab" data-view="settings">Settings & help</button>
+</nav>
+
+<section id="calendar" class="view active">
+ <div class="card">
+  <div class="calendar-head"><div class="row"><button id="prevMonth">←</button><button id="nextMonth">→</button><h2 id="monthLabel"></h2></div><button id="calendarToday">Today</button></div>
+  <div class="calendar" id="calendarGrid"></div>
+  <div class="row small muted" style="margin-top:12px"><span><i class="dot done"></i>Reviewed</span><span><i class="dot plan"></i>Plan saved / incomplete</span><span><i class="dot loss"></i>Reviewed losing day</span><span class="pill">Click a date to open it</span></div>
+ </div>
+ <div class="grid four" id="calendarMetrics"></div>
+</section>
+
+<section id="day" class="view">
+ <div class="between" style="margin-bottom:12px"><div><div class="muted small">DAILY WORKSPACE</div><h2 id="dayHeading" style="margin:2px 0">Daily journal</h2><div id="saveStatus" class="status">Changes save automatically on this device.</div></div><div class="toolbar"><button id="dayPrev">← Previous</button><button id="dayNext">Next →</button><button id="deleteDay" class="danger">Delete day</button></div></div>
+ <div class="card">
+  <div class="section-title"><span>01</span><h3>Premarket plan</h3></div>
+  <div class="grid four">
+   <div class="field"><label>Instrument</label><input value="NQ — Nasdaq-100 futures" disabled></div>
+   <div class="field"><label>Trading session</label><input value="New York session only" disabled></div>
+  </div>
+  <div class="grid two" style="margin-top:12px">
+   <div class="field"><label>Market opening type / location vs yesterday's value</label><select data-day="openingType"><option value="">Select opening type</option><option>Open inside yesterday's VA (between VAH and VAL)</option><option>Open above yesterday's VAH</option><option>Open below yesterday's VAL</option><option>Open at / near VAH</option><option>Open at / near VAL</option><option>Other / unclear</option></select><p class="muted small" style="margin:3px 0 0">Use the opening location as context, not as a standalone prediction.</p></div>
+   <div class="field"><label>Economic calendar, news and headlines</label><textarea data-day="news" placeholder="Event, time (ET), expected impact, headline risk..."></textarea></div>
+  </div>
+  <div class="card" style="background:#101721;margin-top:12px">
+   <div class="between"><div><h3 style="margin:0 0 4px">Premarket chart & marked levels</h3><p class="muted small" style="margin:0">Upload your premarket chart screenshot with all important levels marked. It will appear below as a large preview; no need to type market levels.</p></div><span class="pill">Before market open</span></div>
+   <div class="pastezone" id="premarketPasteZone" tabindex="0" data-zone="premarket">
+    <div class="pz-title">📋 Click here, then press Ctrl+V (⌘V) to paste a screenshot</div>
+    <div class="pz-sub"><input type="file" id="premarketImages" accept="image/*" multiple><span class="status">or upload a file</span></div>
+   </div>
+   <div class="images premarket-gallery" id="premarketImageList"></div>
+  </div>
+  <div class="card" style="background:#101721;margin-top:12px">
+   <h3 style="margin-bottom:6px">Opening-location rule reminder</h3>
+   <p class="muted small" style="margin:0">If NQ opens OUTSIDE yesterday's value area (above VAH or below VAL), treat the market as being in IMBALANCE. Do not try to catch the top or bottom, and do not fade the move just because price looks extended. Avoid predicting where the move will end. Wait for your planned setup and confirmation, manage risk, and let price action show whether the imbalance is continuing or failing.</p>
+  </div>
+  <div class="section-title"><span>B</span><h3>Scenarios & execution plan</h3></div>
+  <div class="grid three">
+   <div class="field"><label>Bullish scenario</label><textarea data-day="bull" placeholder="If price does X at Y, then..."></textarea></div>
+   <div class="field"><label>Bearish scenario</label><textarea data-day="bear" placeholder="If price does X at Y, then..."></textarea></div>
+   <div class="field"><label>Neutral / no-trade scenario</label><textarea data-day="neutral" placeholder="Conditions where I stand aside..."></textarea></div>
+  </div>
+  <div class="grid two" style="margin-top:12px">
+   <div class="field"><label>Primary setup & exact entry trigger</label><textarea data-day="primary" placeholder="Setup, location, trigger, required confirmation..."></textarea></div>
+   <div class="field"><label>Secondary setup</label><textarea data-day="secondary" placeholder="Only if the primary setup does not appear..."></textarea></div>
+   <div class="field"><label>Invalidation / no-trade conditions</label><textarea data-day="invalidation" placeholder="What must not happen; when setup is no longer valid..."></textarea></div>
+   <div class="field"><label>Daily guardrails</label><textarea data-day="guardrails" placeholder="e.g. stop after 2 consecutive losses, pause around major news..."></textarea></div>
+  </div>
+  <div class="section-title"><span>02</span><h3>During trading — live notebook</h3></div>
+  <p class="muted small">Log observations even when you do not take a trade. Add the time and write what you saw, expected and decided.</p>
+  <div id="notesList"></div><button class="primary" id="addNote">＋ Add time-stamped note</button>
+  <div class="section-title"><span>03</span><h3>Trade records</h3></div>
+  <p class="muted small">One card per NQ execution during the NY session. Enter the R result for the first 50% partial and the final 50% exit; the weighted net result is calculated automatically.</p>
+  <div id="tradesList"></div><button class="primary" id="addTrade">＋ Add trade</button>
+  <div class="section-title"><span>04</span><h3>Postmarket review</h3></div>
+  <div class="grid two">
+   <div class="field"><label>What happened today? Compare with premarket plan.</label><textarea data-day="reviewWhat" class="tall"></textarea></div>
+   <div class="field"><label>Best decision / what I did well</label><textarea data-day="reviewBest" class="tall"></textarea></div>
+   <div class="field"><label>Biggest mistake / missed opportunity</label><textarea data-day="reviewMistake" class="tall"></textarea></div>
+   <div class="field"><label>Lesson and one adjustment for next session</label><textarea data-day="reviewLesson" class="tall"></textarea></div>
+  </div>
+  <div class="grid four" style="margin-top:12px">
+   <div class="field"><label>Day status</label><select data-day="status"><option value="Incomplete">Incomplete</option><option>Plan saved</option><option>Reviewed</option><option>No trade</option></select></div>
+   <div class="field"><label>Discipline (1–10)</label><input data-day="discipline" type="number" min="1" max="10"></div>
+   <div class="field"><label>Daily P&L ($) — calculated</label><input id="dayPnl" disabled></div>
+   <div class="field"><label>Trade count — calculated</label><input id="dayCount" disabled></div>
+  </div>
+  <div class="section-title"><span>05</span><h3>Manual chart screenshots</h3></div>
+  <p class="muted small">Upload screenshots manually from your computer. They stay in this browser's local database. Export a backup regularly to protect them.</p>
+  <div class="pastezone" id="dayPasteZone" tabindex="0" data-zone="day">
+   <div class="pz-title">📋 Click here, then press Ctrl+V (⌘V) to paste a screenshot</div>
+   <div class="pz-sub"><input type="file" id="dayImages" accept="image/*" multiple><span class="status">or upload a file · PNG / JPG / WebP</span></div>
+  </div>
+  <div class="images" id="dayImageList"></div>
+ </div>
+</section>
+
+<section id="history" class="view">
+ <div class="card"><div class="between"><div><h2>Journal history</h2><p class="muted small">Find a previous day and reopen its notes.</p></div><div class="toolbar"><input id="historySearch" placeholder="Search notes / levels..."><select id="historyFilter"><option value="all">All days</option><option value="Reviewed">Reviewed</option><option value="Plan saved">Plan saved</option><option value="No trade">No trade</option><option value="Incomplete">Incomplete</option><option value="profit">Profitable</option><option value="loss">Losing</option></select></div></div><div id="historyList"></div></div>
+</section>
+
+<section id="stats" class="view">
+ <div class="card"><div class="between"><div><h2 style="margin:0 0 4px">Overview filters</h2><p class="muted small" style="margin:0">Choose a date range to update all overview statistics and daily results.</p></div><div class="toolbar"><label class="small muted" for="statsFrom">From</label><input id="statsFrom" type="date" aria-label="From date"><label class="small muted" for="statsTo">To</label><input id="statsTo" type="date" aria-label="To date"><button id="statsClear" class="ghost">Clear dates</button></div></div></div>
+ <div class="grid four" id="statsGrid"></div>
+ <div class="card"><h2>Daily results</h2><div id="resultBars"></div></div>
+ <p class="muted small">Statistics are descriptive, not predictive. Small samples can be misleading. All results are based only on trades you manually record.</p>
+</section>
+
+<section id="settings" class="view">
+ <div id="backupBanner"></div>
+ <div class="card">
+  <h2>Google Drive backup</h2>
+  <p class="muted small">Keeps an extra copy of your journal — including screenshots — as one file in your own Google Drive, on top of the local copy in this browser. Local storage stays the primary copy; Drive is a safety net in case this device is lost, reset, or you switch computers.</p>
+  <div id="driveStatus" class="status" style="margin:8px 0"></div>
+  <div class="row">
+   <button class="primary" id="driveConnectBtn">Connect Google Drive</button>
+   <button id="driveSyncBtn">Sync now</button>
+   <button class="danger" id="driveDisconnectBtn">Disconnect</button>
+  </div>
+  <details class="setup" style="margin-top:12px">
+   <summary class="small muted">One-time setup (do this once, in Google Cloud Console)</summary>
+   <ol class="muted small">
+    <li>Go to <code>console.cloud.google.com</code> and create a project (or pick an existing one).</li>
+    <li><strong>APIs &amp; Services → Library</strong> → search for and enable <strong>Google Drive API</strong>.</li>
+    <li><strong>APIs &amp; Services → OAuth consent screen</strong> → choose <strong>External</strong> → fill in the basic app info → under <strong>Test users</strong>, add your own Google account. (In testing mode no Google review is needed, since only you can sign in.)</li>
+    <li><strong>APIs &amp; Services → Credentials → Create Credentials → OAuth client ID</strong> → Application type <strong>Web application</strong>.</li>
+    <li>Under <strong>Authorized JavaScript origins</strong>, add the exact web address you'll open this journal from (e.g. <code>https://yourname.github.io</code>) — opening the file by double-clicking it (<code>file://…</code>) will not work; it has to be served from a real address. Free options: GitHub Pages or Netlify.</li>
+    <li>Click Create, then copy the <strong>Client ID</strong> it gives you.</li>
+    <li>Open this HTML file in a text editor, find <code>GOOGLE_CLIENT_ID = ''</code> near the top of the <code>&lt;script&gt;</code> section, and paste your Client ID between the quotes.</li>
+    <li>Upload the file to your hosting (GitHub Pages / Netlify) and open it from that address. The Client ID is safe to leave in the file — it's a public identifier, not a secret.</li>
+   </ol>
+  </details>
+ </div>
+ <div class="card"><h2>Local storage & backups</h2><p class="muted">Your journal stays in this browser on this computer. It does not sync to a server. Clearing browser data can erase it, so export backups regularly.</p><div class="row"><button class="primary" id="settingsExport">Export full backup (JSON)</button><button id="settingsImport">Import backup</button><button class="danger" id="wipeBtn">Erase all local journal data</button></div></div>
+ <div class="card"><h2>How to use</h2><ol class="muted"><li>Open the calendar and select a date.</li><li>Complete the premarket plan before your session. Save partial notes whenever you like.</li><li>During trading, add time-stamped observations and record decisions, including no-trade decisions.</li><li>Add each execution as a trade card: enter net P&L and initial risk to calculate net R automatically, optionally mark a 50% partial at 2R, and upload chart screenshots for a large preview.</li><li>Finish the postmarket review and mark the day Reviewed or No trade.</li><li>Export a JSON backup periodically and keep it somewhere safe.</li></ol></div>
+ <div class="card"><h2>Trading rules checklist (editable reference)</h2><div class="checkline"><input type="checkbox"> No trade within my predefined high-impact news window</div><div class="checkline"><input type="checkbox"> Respect daily loss and contract limits</div><div class="checkline"><input type="checkbox"> Stop after my predefined consecutive-loss limit</div><div class="checkline"><input type="checkbox"> Wait for setup conditions; do not chase</div><div class="checkline"><input type="checkbox"> Record process quality separately from P&L</div><p class="muted small">These are reminders only and do not enforce broker-side risk controls.</p></div>
+</section>
+<div class="footer">EDGE JOURNAL · Local-first · Manual entry · No broker or chart connections</div>
+</div>
+<script>
+const DB_NAME='edge-journal-db', STORE='records', KEY='journal';
+// --- Google Drive backup config ---
+// Paste your own OAuth Client ID below (see Settings → Google Drive backup for setup steps).
+// This value is safe to leave in the file — a web OAuth Client ID is a public identifier, not a secret.
+const GOOGLE_CLIENT_ID = '';
+const DRIVE_FILE_NAME = 'edge-journal-backup.json';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+let driveAccessToken=null, driveFileId=null, driveTokenClient=null, driveSyncTimer=null, driveBusy=false;
+let db, data={days:{}}, currentDate=iso(new Date()), monthCursor=new Date();
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let activePasteZone=null;
+function setActiveZone(el){$$('.pastezone').forEach(z=>z.classList.remove('active'));if(!el)return;el.classList.add('active');activePasteZone={type:el.dataset.zone,tradeIndex:el.dataset.tradeIndex!==undefined?Number(el.dataset.tradeIndex):null}}
+function clearActiveZone(){activePasteZone=null;$$('.pastezone').forEach(z=>z.classList.remove('active'))}
+document.addEventListener('click',e=>{let z=e.target.closest('.pastezone');if(z)setActiveZone(z)});
+document.addEventListener('focusin',e=>{let z=e.target.closest('.pastezone');if(z)setActiveZone(z)});
+document.addEventListener('paste',e=>{
+ if(!activePasteZone)return;
+ let items=(e.clipboardData||window.clipboardData)?.items;if(!items)return;
+ let files=[...items].filter(it=>it.kind==='file'&&it.type&&it.type.startsWith('image/')).map(it=>it.getAsFile()).filter(Boolean);
+ if(!files.length)return;
+ e.preventDefault();
+ files.forEach((f,idx)=>{if(!f.name||/^image\.(png|jpe?g|gif|webp)$/i.test(f.name))Object.defineProperty(f,'name',{value:'pasted-screenshot-'+Date.now()+(files.length>1?'-'+idx:'')+'.'+(f.type.split('/')[1]||'png'),configurable:true})});
+ routePastedFiles(files)
+});
+function routePastedFiles(files){
+ let zone=activePasteZone;if(!zone)return;
+ addImages(files,imgs=>{
+  let flashEl=null;
+  if(zone.type==='premarket'){day().premarketImages||=[];day().premarketImages.push(...imgs);save();renderPremarketImages();flashEl=$('#premarketPasteZone')}
+  else if(zone.type==='day'){day().images.push(...imgs);save();renderImages();flashEl=$('#dayPasteZone')}
+  else if(zone.type==='trade'&&zone.tradeIndex!=null){let t=day().trades[zone.tradeIndex];if(t){t.images||=[];t.images.push(...imgs);save();renderTrades();flashEl=$(`.pastezone[data-zone="trade"][data-trade-index="${zone.tradeIndex}"]`)}}
+  if(flashEl){flashEl.classList.add('pz-flash');setActiveZone(flashEl);setTimeout(()=>flashEl.classList.remove('pz-flash'),500)}
+ })
+}
+// --- Lightbox: high-quality zoom/pan viewer for screenshots ---
+let lb={scale:1,minScale:1,maxScale:12,x:0,y:0,dragging:false,sx:0,sy:0,sx0:0,sy0:0,natW:0,natH:0};
+function lbApply(){$('#lbImg').style.transform=`translate(-50%,-50%) translate(${lb.x}px,${lb.y}px) scale(${lb.scale})`;$('#lbZoomReset').textContent=Math.round(lb.scale*100)+'%'}
+function lbClampPan(){let stage=$('#lbStage'),r=stage.getBoundingClientRect();let w=lb.natW*lb.scale,h=lb.natH*lb.scale;let maxX=Math.max(0,(w-r.width)/2),maxY=Math.max(0,(h-r.height)/2);lb.x=Math.min(maxX,Math.max(-maxX,lb.x));lb.y=Math.min(maxY,Math.max(-maxY,lb.y))}
+function lbSetScale(ns,cx,cy){ns=Math.min(lb.maxScale,Math.max(lb.minScale,ns));if(cx!=null){let stage=$('#lbStage'),r=stage.getBoundingClientRect();let dx=cx-(r.left+r.width/2)-lb.x,dy=cy-(r.top+r.height/2)-lb.y;let f=ns/lb.scale;lb.x-=dx*(f-1);lb.y-=dy*(f-1)}lb.scale=ns;if(lb.scale<=lb.minScale+0.001){lb.x=0;lb.y=0}lbClampPan();lbApply()}
+function openLightbox(src,name){let img=$('#lbImg');img.src=src;$('#lbName').textContent=name||'';lb.scale=1;lb.x=0;lb.y=0;$('#lightbox').classList.add('open');document.body.style.overflow='hidden';img.onload=()=>{lb.natW=img.naturalWidth;lb.natH=img.naturalHeight;let stage=$('#lbStage'),r=stage.getBoundingClientRect();let fit=Math.min(1,(r.width*0.94)/lb.natW,(r.height*0.94)/lb.natH);img.style.width=lb.natW+'px';img.style.height=lb.natH+'px';lb.scale=fit>0?fit:1;lb.minScale=lb.scale;lb.maxScale=Math.max(lb.scale*12,4);lbApply()}}
+function closeLightbox(){$('#lightbox').classList.remove('open');$('#lbImg').src='';document.body.style.overflow=''}
+$('#lbClose').onclick=closeLightbox;
+$('#lightbox').addEventListener('click',e=>{if(e.target.id==='lightbox')closeLightbox()});
+document.addEventListener('keydown',e=>{if(!$('#lightbox').classList.contains('open'))return;if(e.key==='Escape')closeLightbox();if(e.key==='+'||e.key==='=')lbSetScale(lb.scale*1.3);if(e.key==='-')lbSetScale(lb.scale/1.3)});
+$('#lbZoomIn').onclick=()=>lbSetScale(lb.scale*1.4);
+$('#lbZoomOut').onclick=()=>lbSetScale(lb.scale/1.4);
+$('#lbZoomReset').onclick=()=>{lb.scale=lb.minScale;lb.x=0;lb.y=0;lbApply()};
+let lbStageEl;
+function initLightboxStage(){lbStageEl=$('#lbStage');
+ lbStageEl.addEventListener('wheel',e=>{if(!$('#lightbox').classList.contains('open'))return;e.preventDefault();let factor=Math.exp(-e.deltaY*0.0018);lbSetScale(lb.scale*factor,e.clientX,e.clientY)},{passive:false});
+ lbStageEl.addEventListener('dblclick',e=>{if(lb.scale>lb.minScale+0.01){lb.scale=lb.minScale;lb.x=0;lb.y=0;lbApply()}else{lbSetScale(lb.minScale*2.5,e.clientX,e.clientY)}});
+ lbStageEl.addEventListener('pointerdown',e=>{lb.dragging=true;lb.sx=e.clientX;lb.sy=e.clientY;lb.sx0=lb.x;lb.sy0=lb.y;lbStageEl.classList.add('grabbing');lbStageEl.setPointerCapture(e.pointerId)});
+ lbStageEl.addEventListener('pointermove',e=>{if(!lb.dragging)return;lb.x=lb.sx0+(e.clientX-lb.sx);lb.y=lb.sy0+(e.clientY-lb.sy);lbClampPan();lbApply()});
+ ['pointerup','pointercancel','pointerleave'].forEach(ev=>lbStageEl.addEventListener(ev,()=>{lb.dragging=false;lbStageEl.classList.remove('grabbing')}));
+ let lastDist=null;
+ lbStageEl.addEventListener('touchmove',e=>{if(e.touches.length===2){e.preventDefault();let [a,b]=e.touches,dist=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);if(lastDist!=null){let cx=(a.clientX+b.clientX)/2,cy=(a.clientY+b.clientY)/2;lbSetScale(lb.scale*(dist/lastDist),cx,cy)}lastDist=dist}},{passive:false});
+ lbStageEl.addEventListener('touchend',()=>{lastDist=null});
+}
+// --- Google Drive backup: sign-in, find/create backup file, push/pull JSON ---
+function driveConfigured(){return !!GOOGLE_CLIENT_ID}
+function driveAuthHeaders(){return {'Authorization':'Bearer '+driveAccessToken}}
+function renderDriveStatus(msg,isErr){let root=$('#driveStatus');if(!root)return;
+ if(!driveConfigured()){root.innerHTML='Not set up yet — see "One-time setup" below to connect your own Google account.';return}
+ if(!driveAccessToken){root.innerHTML=`<span class="${isErr?'negative':'muted'}">${msg||'Not connected.'}</span>`;return}
+ root.innerHTML=`<span class="${isErr?'negative':'positive'}">${msg||'Connected.'}</span>`}
+function waitForGoogle(cb,tries){if(window.google&&google.accounts&&google.accounts.oauth2){cb()}else if((tries||0)<50){setTimeout(()=>waitForGoogle(cb,(tries||0)+1),100)}else{renderDriveStatus('Google sign-in script could not load (check your connection).',true)}}
+function initGoogleDrive(){
+ driveTokenClient=google.accounts.oauth2.initTokenClient({client_id:GOOGLE_CLIENT_ID,scope:DRIVE_SCOPE,callback:async resp=>{
+  if(resp.error){renderDriveStatus('Sign-in failed: '+resp.error,true);return}
+  driveAccessToken=resp.access_token;
+  try{localStorage.setItem('edgeJournalDriveConnected','1')}catch(e){}
+  await afterDriveConnect()
+ }});
+ let wasConnected=false;try{wasConnected=localStorage.getItem('edgeJournalDriveConnected')==='1'}catch(e){}
+ if(wasConnected){try{driveTokenClient.requestAccessToken({prompt:''})}catch(e){}}
+}
+function connectDrive(){
+ if(!driveConfigured()){alert('Google Drive is not set up yet. Open Settings → Google Drive backup and follow the one-time setup steps.');return}
+ if(!driveTokenClient){renderDriveStatus('Still loading Google sign-in…');return}
+ driveTokenClient.requestAccessToken({prompt:'consent'})
+}
+function disconnectDrive(){
+ if(driveAccessToken&&window.google&&google.accounts&&google.accounts.oauth2){try{google.accounts.oauth2.revoke(driveAccessToken,()=>{})}catch(e){}}
+ driveAccessToken=null;driveFileId=null;
+ try{localStorage.removeItem('edgeJournalDriveConnected')}catch(e){}
+ renderDriveStatus('Disconnected.')
+}
+async function driveFindFile(){
+ let q=encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false`);
+ let res=await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)&spaces=drive`,{headers:driveAuthHeaders()});
+ if(res.status===401){driveAccessToken=null;throw new Error('Drive session expired — reconnect to keep syncing.')}
+ if(!res.ok)throw new Error('Could not reach Drive (HTTP '+res.status+')');
+ let j=await res.json();return (j.files&&j.files[0])||null
+}
+async function driveDownloadFile(id){
+ let res=await fetch(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`,{headers:driveAuthHeaders()});
+ if(!res.ok)throw new Error('Could not download Drive backup (HTTP '+res.status+')');
+ let obj=await res.json();return obj.data||obj
+}
+async function driveUpload(){
+ let payload=JSON.stringify({version:1,exportedAt:new Date().toISOString(),data});
+ if(driveFileId){
+  let res=await fetch(`https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`,{method:'PATCH',headers:{...driveAuthHeaders(),'Content-Type':'application/json'},body:payload});
+  if(res.status===401){driveAccessToken=null;throw new Error('Drive session expired — reconnect to keep syncing.')}
+  if(!res.ok)throw new Error('Drive upload failed (HTTP '+res.status+')')
+ }else{
+  let boundary='edgejournal'+Date.now();
+  let metadata=JSON.stringify({name:DRIVE_FILE_NAME,mimeType:'application/json'});
+  let body=`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${metadata}\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n${payload}\r\n--${boundary}--`;
+  let res=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:{...driveAuthHeaders(),'Content-Type':`multipart/related; boundary=${boundary}`},body});
+  if(res.status===401){driveAccessToken=null;throw new Error('Drive session expired — reconnect to keep syncing.')}
+  if(!res.ok)throw new Error('Drive create failed (HTTP '+res.status+')');
+  let j=await res.json();driveFileId=j.id
+ }
+}
+async function afterDriveConnect(){
+ renderDriveStatus('Connected. Checking for an existing backup…');
+ try{
+  let existing=await driveFindFile();
+  if(existing){
+   driveFileId=existing.id;
+   let localDays=Object.keys(data.days).length;
+   let when=existing.modifiedTime?new Date(existing.modifiedTime).toLocaleString():'earlier';
+   if(confirm(`Google Drive already has an Edge Journal backup (last updated ${when}).\n\nThis browser currently has ${localDays} journal day(s) saved.\n\nOK = load the Drive backup into this browser (replaces what's here — export a local backup first if unsure).\nCancel = keep this browser's data and start syncing it up to Drive instead.`)){
+    let remote=await driveDownloadFile(driveFileId);
+    if(remote&&remote.days){data=remote;await dbPut();renderCalendar();if($('#day').classList.contains('active'))renderDay();renderBackupBanner();renderDriveStatus('Loaded backup from Drive · '+new Date().toLocaleTimeString())}
+   }else{await driveSyncNow(false)}
+  }else{await driveSyncNow(false)}
+ }catch(e){renderDriveStatus(e.message,true)}
+}
+async function driveSyncNow(manual){
+ if(!driveAccessToken){if(manual)alert('Connect Google Drive first.');return}
+ if(driveBusy)return;driveBusy=true;
+ renderDriveStatus('Syncing to Drive…');
+ try{await driveUpload();renderDriveStatus('Synced to Drive · '+new Date().toLocaleTimeString())}
+ catch(e){renderDriveStatus(e.message,true)}
+ finally{driveBusy=false}
+}
+function scheduleDriveSync(){if(!driveAccessToken)return;clearTimeout(driveSyncTimer);driveSyncTimer=setTimeout(()=>driveSyncNow(false),4000)}
+function iso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function blankDay(){return {fields:{},notes:[],trades:[],images:[],status:'Incomplete'}}
+function day(){return data.days[currentDate] ||= blankDay()}
+function openDB(){return new Promise((resolve,reject)=>{let req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>req.result.createObjectStore(STORE);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+function dbGet(){return new Promise((resolve,reject)=>{let tx=db.transaction(STORE,'readonly'),r=tx.objectStore(STORE).get(KEY);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
+function dbPut(){return new Promise((resolve,reject)=>{let tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(data,KEY);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
+let saveTimer;function save(){clearTimeout(saveTimer);$('#saveStatus').textContent='Saving…';saveTimer=setTimeout(async()=>{try{await dbPut();$('#saveStatus').textContent='Saved locally · '+new Date().toLocaleTimeString()}catch(e){$('#saveStatus').textContent='Save failed: '+e.message}renderCalendarMetrics();scheduleDriveSync()},250)}
+function setView(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===v));$$('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(v==='calendar')renderCalendar();if(v==='history')renderHistory();if(v==='stats')renderStats();if(v==='day')renderDay();if(v==='settings'){renderBackupBanner();renderDriveStatus()}}
+function renderBackupBanner(){let root=$('#backupBanner');if(!root)return;let dayCount=Object.keys(data.days).length;if(!dayCount){root.innerHTML='';return}
+let last=null;try{last=localStorage.getItem('edgeJournalLastBackup')}catch(e){}
+let daysSince=last?Math.floor((Date.now()-new Date(last).getTime())/86400000):null;
+if(last&&daysSince<3){root.innerHTML=`<div class="banner banner-ok"><span>✓ Last backup exported ${daysSince===0?'today':daysSince+' day'+(daysSince===1?'':'s')+' ago'}.</span></div>`}
+else{let msg=last?`Your last backup was ${daysSince} days ago. Export a fresh one to protect your journal and screenshots.`:'You have journal data saved on this device only, and no backup has been exported yet. Export one now so a cleared browser or new device does not lose it.';root.innerHTML=`<div class="banner banner-warn"><span>⚠ ${msg}</span><button class="primary" onclick="exportBackup()">Export backup now</button></div>`}}
+function openDay(date){currentDate=date;clearActiveZone();setView('day')}
+$$('.tab').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+$('#todayBtn').onclick=()=>openDay(iso(new Date()));$('#calendarToday').onclick=()=>{monthCursor=new Date();renderCalendar()};
+$('#prevMonth').onclick=()=>{monthCursor.setMonth(monthCursor.getMonth()-1);renderCalendar()};$('#nextMonth').onclick=()=>{monthCursor.setMonth(monthCursor.getMonth()+1);renderCalendar()};
+$('#dayPrev').onclick=()=>{let d=new Date(currentDate+'T12:00:00');d.setDate(d.getDate()-1);openDay(iso(d))};$('#dayNext').onclick=()=>{let d=new Date(currentDate+'T12:00:00');d.setDate(d.getDate()+1);openDay(iso(d))};
+$('#deleteDay').onclick=async()=>{if(confirm('Delete this entire day, including notes, trades and screenshots?')){delete data.days[currentDate];await save();openDay(currentDate)}};
+function renderCalendar(){let y=monthCursor.getFullYear(),m=monthCursor.getMonth();$('#monthLabel').textContent=monthCursor.toLocaleDateString(undefined,{month:'long',year:'numeric'});let first=new Date(y,m,1),start=(first.getDay()+6)%7;let totalCells=Math.ceil((start+new Date(y,m+1,0).getDate())/7)*7;let g=$('#calendarGrid');g.innerHTML='';['Mon','Tue','Wed','Thu','Fri'].forEach(x=>{let e=document.createElement('div');e.className='dow';e.textContent=x;g.append(e)});let wkHead=document.createElement('div');wkHead.className='dow wk-dow';wkHead.textContent='Week P&L';g.append(wkHead);
+for(let w=0;w<totalCells/7;w++){let weekPnl=0,weekTrades=0;for(let i=0;i<7;i++){let dt=new Date(y,m,1-start+w*7+i),key=iso(dt),d=data.days[key];if(d){weekPnl+=sumPnl(d);weekTrades+=(d.trades||[]).length}if(i<5){let b=document.createElement('button');b.className='day'+(dt.getMonth()!==m?' dim':'')+(key===iso(new Date())?' today':'');let pnl=d?sumPnl(d):0;let dot=d?(d.status==='Reviewed'?(pnl<0?'loss':'done'):'plan'):'';b.innerHTML=`<span class="daynum">${dt.getDate()}</span>${d?`<span class="daymeta"><i class="dot ${dot}"></i>${escapeHtml(d.fields?.instrument||'Journal')}</span><span class="daymeta pnl ${pnl>0?'positive':pnl<0?'negative':''}">${d.trades?.length?fmtR(pnl):d.status||'Plan'}</span>`:''}`;b.onclick=()=>openDay(key);g.append(b)}}
+let wc=document.createElement('div');wc.className='weekcell';wc.innerHTML=`<span class="wk-label">This week</span><span class="wk-pnl ${weekPnl>0?'positive':weekPnl<0?'negative':'muted'}">${weekTrades?fmtR(weekPnl):'—'}</span><span class="wk-count">${weekTrades} trade${weekTrades===1?'':'s'}</span>`;g.append(wc)}
+renderCalendarMetrics()}
+function renderCalendarMetrics(){let days=Object.values(data.days),tr=days.flatMap(d=>d.trades||[]),p=tr.reduce((a,t)=>a+net(t),0);$('#calendarMetrics').innerHTML=[['Journal days',days.length],['Recorded trades',tr.length],['Net result',fmtR(p)],['Reviewed days',days.filter(d=>d.status==='Reviewed').length]].map(x=>`<div class="metric"><div class="l">${x[0]}</div><div class="v">${x[1]}</div></div>`).join('')}
+function bindFields(){let d=day();$$('[data-day]').forEach(el=>{let k=el.dataset.day;el.value=d.fields[k]??(k==='status'?'Incomplete':'');el.oninput=el.onchange=()=>{d.fields[k]=el.value;if(k==='status')d.status=el.value;save();updateDayTotals()}})}
+function renderDay(){let d=day();$('#dayHeading').textContent=new Date(currentDate+'T12:00:00').toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});bindFields();renderNotes();renderTrades();renderPremarketImages();renderImages();updateDayTotals()}
+function updateDayTotals(){let d=day();$('#dayPnl').value=fmtR(sumPnl(d));$('#dayCount').value=(d.trades||[]).length}
+function renderNotes(){let d=day(),root=$('#notesList');root.innerHTML='';(d.notes||[]).forEach((n,i)=>{let row=document.createElement('div');row.className='note';row.innerHTML=`<input type="time" value="${escapeAttr(n.time||'')}" aria-label="Time"><textarea placeholder="Observation, expectation, decision and why...">${escapeHtml(n.text||'')}</textarea><button class="danger">Remove</button>`;let [time,txt,del]=row.children;time.onchange=()=>{n.time=time.value;save()};txt.oninput=()=>{n.text=txt.value;save()};del.onclick=()=>{d.notes.splice(i,1);save();renderNotes()};root.append(row)})}
+$('#addNote').onclick=()=>{let d=day(),now=new Date();d.notes.push({time:now.toTimeString().slice(0,5),text:''});save();renderNotes();$('#notesList').lastElementChild?.querySelector('textarea')?.focus()};
+function fmtR(v){return (Number(v)||0).toFixed(2)+'R'}
+function net(t){let p=Number(t.partialR),f=Number(t.finalR);let hasP=t.partialR!==undefined&&t.partialR!=='';let hasF=t.finalR!==undefined&&t.finalR!=='';if(hasP&&hasF)return (p+f)/2;if(hasP)return p/2;if(hasF)return f/2;return 0}
+function sumPnl(d){return (d.trades||[]).reduce((s,t)=>s+net(t),0)}
+function tradeR(t){return net(t)}
+function renderTrades(){let d=day(),root=$('#tradesList');root.innerHTML='';(d.trades||[]).forEach((t,i)=>{let el=document.createElement('div');el.className='trade';el.innerHTML=`<div class="trade-head"><strong>Trade ${i+1} <span class="pill">NQ · NY</span></strong><div class="row"><span class="pnl ${net(t)>0?'positive':net(t)<0?'negative':''}">${fmtR(net(t))}</span><button class="danger">Delete</button></div></div>
+<div class="trade-grid trade-minimal">
+<div class="field"><label>First exit — 50% partial (R)</label><input data-key="partialR" type="number" step="0.01" value="${escapeAttr(t.partialR??'')}" placeholder="e.g. 2.00"></div>
+<div class="field"><label>Final exit — remaining 50% (R)</label><input data-key="finalR" type="number" step="0.01" value="${escapeAttr(t.finalR??'')}" placeholder="e.g. 3.00"></div>
+<div class="field"><label>Net trade result (R)</label><input class="rr-display" value="${fmtR(net(t))}" disabled></div>
+</div>
+<div class="pastezone" tabindex="0" data-zone="trade" data-trade-index="${i}" style="margin-top:12px">
+<div class="pz-title">📋 Click here, then press Ctrl+V (⌘V) to paste a trade screenshot</div>
+<div class="pz-sub"><input type="file" accept="image/*" multiple data-trade-images="${i}"><span class="status">or upload a file · ${(t.images||[]).length} image(s)</span></div>
+</div><div class="images trade-gallery" data-trade-gallery="${i}"></div>`;root.append(el);
+el.querySelector('.trade-head button').onclick=()=>{d.trades.splice(i,1);clearActiveZone();save();renderTrades();updateDayTotals()};
+el.querySelectorAll('[data-key]').forEach(inp=>{let k=inp.dataset.key;inp.oninput=()=>{t[k]=inp.value;save();updateDayTotals();let h=el.querySelector('.trade-head .pnl');h.textContent=fmtR(net(t));h.className='pnl '+(net(t)>0?'positive':net(t)<0?'negative':'');el.querySelector('.rr-display').value=fmtR(net(t))}});
+el.querySelector(`[data-trade-images="${i}"]`).onchange=e=>addImages(e.target.files,imgs=>{t.images||=[];t.images.push(...imgs);save();renderTrades()});
+renderTradeImages(el.querySelector(`[data-trade-gallery="${i}"]`),t.images||[],idx=>{t.images.splice(idx,1);save();renderTrades()});
+})}
+function fieldHtml(label,key,t,type,opts=''){let val=t[key]??'';let input=type==='select'?`<select data-key="${key}"><option value="">Select</option>${opts.split(',').map(o=>`<option ${o===val?'selected':''}>${o}</option>`).join('')}</select>`:`<input data-key="${key}" type="${type}" step="${type==='number'?'any':'1'}" value="${escapeAttr(val)}">`;return `<div class="field"><label>${label}</label>${input}</div>`}
+$('#addTrade').onclick=()=>{day().trades.push({images:[]});save();renderTrades();let last=$('#tradesList').lastElementChild;last?.scrollIntoView({behavior:'smooth',block:'center'});let pz=last?.querySelector('.pastezone');if(pz)setActiveZone(pz)};
+function addImages(files,done){let arr=[...files].filter(f=>f.type.startsWith('image/'));if(!arr.length)return;Promise.all(arr.map(f=>new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res({name:f.name,data:r.result});r.onerror=rej;r.readAsDataURL(f)}))).then(done).catch(e=>alert('Could not read image: '+e.message))}
+$('#dayImages').onchange=e=>addImages(e.target.files,imgs=>{day().images.push(...imgs);save();renderImages();e.target.value=''});
+$('#premarketImages').onchange=e=>addImages(e.target.files,imgs=>{day().premarketImages||=[];day().premarketImages.push(...imgs);save();renderPremarketImages();e.target.value=''});
+function renderPremarketImages(){let root=$('#premarketImageList');root.innerHTML='';(day().premarketImages||[]).forEach((im,i)=>{let box=document.createElement('div');box.className='imgbox';box.innerHTML=`<img src="${im.data}" alt="${escapeAttr(im.name)}"><div>${escapeHtml(im.name)} · Premarket chart preview</div><button class="danger">Remove screenshot</button>`;box.querySelector('img').onclick=()=>openLightbox(im.data,im.name);box.querySelector('button').onclick=()=>{day().premarketImages.splice(i,1);save();renderPremarketImages()};root.append(box)})}
+function renderImages(){renderTradeImages($('#dayImageList'),day().images||[],i=>{day().images.splice(i,1);save();renderImages()})}
+function renderTradeImages(root,imgs,remove){root.innerHTML='';imgs.forEach((im,i)=>{let box=document.createElement('div');box.className='imgbox';box.innerHTML=`<img src="${im.data}" alt="${escapeAttr(im.name)}"><div>${escapeHtml(im.name)}</div><button class="danger">Remove</button>`;box.querySelector('img').onclick=()=>openLightbox(im.data,im.name);box.querySelector('button').onclick=()=>remove(i);root.append(box)})}
+function money(v){return (Number(v)||0).toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:2})}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function escapeAttr(s){return escapeHtml(s).replace(/`/g,'&#96;')}
+function renderHistory(){let q=$('#historySearch').value.toLowerCase(),f=$('#historyFilter').value;let rows=Object.entries(data.days).sort((a,b)=>b[0].localeCompare(a[0])).filter(([date,d])=>{let pnl=sumPnl(d),hay=[date,JSON.stringify(d.fields||{}),JSON.stringify(d.notes||[]),JSON.stringify(d.trades||[])].join(' ').toLowerCase();return (!q||hay.includes(q))&&(f==='all'||f==='profit'&&pnl>0||f==='loss'&&pnl<0||f!=='profit'&&f!=='loss'&&d.status===f)});$('#historyList').innerHTML=rows.length?rows.map(([date,d])=>`<div class="between" style="padding:12px 2px;border-bottom:1px solid var(--line)"><div><strong>${new Date(date+'T12:00:00').toLocaleDateString(undefined,{dateStyle:'medium'})}</strong><div class="small muted">${escapeHtml('NQ · NY session')} · ${(d.trades||[]).length} trades · ${escapeHtml(d.status||'Incomplete')}</div></div><div class="row"><strong class="${sumPnl(d)>0?'positive':sumPnl(d)<0?'negative':''}">${money(sumPnl(d))}</strong><button data-open="${date}">Open</button></div></div>`).join(''):'<div class="empty">No matching journal days.</div>';$$('[data-open]').forEach(b=>b.onclick=()=>openDay(b.dataset.open))}
+$('#historySearch').oninput=renderHistory;$('#historyFilter').onchange=renderHistory;
+function renderStats(){
+let from=$('#statsFrom')?.value||'',to=$('#statsTo')?.value||'';
+let entries=Object.entries(data.days).filter(([date])=>(!from||date>=from)&&(!to||date<=to)).sort((a,b)=>a[0].localeCompare(b[0]));
+let days=entries.map(([,d])=>d),tr=entries.flatMap(([date,d])=>(d.trades||[]).map(t=>({...t,date})));
+let p=tr.reduce((s,t)=>s+net(t),0),wins=tr.filter(t=>net(t)>0).length,loss=tr.filter(t=>net(t)<0).length,breakeven=tr.length-wins-loss,winrate=tr.length?wins/tr.length:0;
+let grossWin=tr.filter(t=>net(t)>0).reduce((s,t)=>s+net(t),0),grossLoss=Math.abs(tr.filter(t=>net(t)<0).reduce((s,t)=>s+net(t),0));
+let disciplineVals=days.map(d=>Number(d.fields?.discipline)).filter(v=>Number.isFinite(v)&&v>0);
+let avgDiscipline=disciplineVals.length?(disciplineVals.reduce((a,b)=>a+b,0)/disciplineVals.length):null;
+let tradingDaysDesc=entries.slice().reverse().filter(([,d])=>(d.trades||[]).length>0);
+let streak=0,streakSign=0;
+for(let [,d] of tradingDaysDesc){let s=Math.sign(sumPnl(d));if(s===0)break;if(streak===0){streakSign=s;streak=1}else if(s===streakSign){streak++}else break}
+let streakLabel=streak?`${streak} ${streakSign>0?'win':'loss'}${streak===1?'':'es'} in a row`:'—';
+let vals=[['Trading days',days.length],['Trades',tr.length],['Win rate',(winrate*100).toFixed(1)+'%'],['Net result',fmtR(p)],['Profit factor',grossLoss? (grossWin/grossLoss).toFixed(2):grossWin?'∞':'—'],['Winning trades',wins],['Losing trades',loss],['Average trade',fmtR(tr.length?p/tr.length:0)],['Avg win (R)',wins?fmtR(grossWin/wins):'—'],['Avg loss (R)',loss?fmtR(-grossLoss/loss):'—'],['Current streak',streakLabel],['Avg discipline',avgDiscipline!=null?avgDiscipline.toFixed(1)+'/10':'—']];
+$('#statsGrid').innerHTML=vals.map(([l,v])=>`<div class="metric"><div class="l">${l}</div><div class="v">${v}</div></div>`).join('');
+let recent=entries.slice().reverse().slice(0,20),scale=Math.max(1,...recent.map(x=>Math.abs(sumPnl(x[1]))));
+$('#resultBars').innerHTML=recent.length?recent.map(([date,d])=>{let v=sumPnl(d),w=Math.min(100,Math.abs(v)/scale*100);return `<div class="row" style="margin:9px 0"><span class="muted small" style="width:95px">${date}</span><div style="flex:1;background:#0d131c;height:13px;border-radius:99px;overflow:hidden"><div style="width:${w}%;height:100%;background:${v>=0?'var(--green)':'var(--red)'}"></div></div><strong class="small ${v>0?'positive':v<0?'negative':''}" style="width:110px;text-align:right">${fmtR(v)}</strong></div>`}).join(''):'<div class="empty">No results in this date range.</div>';
+}
+$('#statsFrom').onchange=renderStats;$('#statsTo').onchange=renderStats;
+$('#statsClear').onclick=()=>{$('#statsFrom').value='';$('#statsTo').value='';renderStats()};
+function download(name,blob){let a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+function exportBackup(){download('edge-journal-backup-'+iso(new Date())+'.json',new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),data},null,2)],{type:'application/json'}));try{localStorage.setItem('edgeJournalLastBackup',new Date().toISOString())}catch(e){}renderBackupBanner()}
+$('#exportBtn').onclick=$('#settingsExport').onclick=exportBackup;
+function importBackup(){let f=$('#importFile');f.click()}
+$('#importBtn').onclick=$('#settingsImport').onclick=importBackup;
+$('#importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let obj=JSON.parse(await f.text());let incoming=obj.data||obj;if(!incoming.days||typeof incoming.days!=='object')throw Error('This file does not look like an Edge Journal backup.');if(!confirm('Import and replace the journal currently stored in this browser? Export a backup first if you want to keep the current data.'))return;data=incoming;await dbPut();renderCalendar();setView('calendar');alert('Backup imported successfully.')}catch(err){alert('Import failed: '+err.message)}finally{e.target.value=''}};
+$('#wipeBtn').onclick=async()=>{if(confirm('Permanently erase ALL journal days and screenshots from this browser? Export a backup first if needed.')){data={days:{}};await dbPut();renderCalendar();setView('calendar')}};
+$('#driveConnectBtn').onclick=connectDrive;
+$('#driveSyncBtn').onclick=()=>driveSyncNow(true);
+$('#driveDisconnectBtn').onclick=disconnectDrive;
+renderDriveStatus();
+if(driveConfigured())waitForGoogle(initGoogleDrive);
+initLightboxStage();
+(async()=>{try{db=await openDB();data=await dbGet()||{days:{}};renderCalendar();renderDay()}catch(e){alert('Your browser could not open local storage. Please use a current version of Chrome, Edge or Firefox. '+e.message)}})();
+</script>
+</body></html>
