@@ -177,7 +177,7 @@ details.setup code{background:#0f1620;border:1px solid var(--line);border-radius
     <li><strong>APIs &amp; Services → Credentials → Create Credentials → OAuth client ID</strong> → Application type <strong>Web application</strong>.</li>
     <li>Under <strong>Authorized JavaScript origins</strong>, add the exact web address you'll open this journal from (e.g. <code>https://yourname.github.io</code>) — opening the file by double-clicking it (<code>file://…</code>) will not work; it has to be served from a real address. Free options: GitHub Pages or Netlify.</li>
     <li>Click Create, then copy the <strong>Client ID</strong> it gives you.</li>
-    <li>Open this HTML file in a text editor, find <code>GOOGLE_CLIENT_ID = ''</code> near the top of the <code>&lt;script&gt;</code> section, and paste your Client ID between the quotes.</li>
+    <li>Open this HTML file in a text editor, find <code>GOOGLE_CLIENT_ID = '723779165266-g0r4pppv2ndo40g3d4fqfci6u9i3beod.apps.googleusercontent.com'</code> near the top of the <code>&lt;script&gt;</code> section, and paste your Client ID between the quotes.</li>
     <li>Upload the file to your hosting (GitHub Pages / Netlify) and open it from that address. The Client ID is safe to leave in the file — it's a public identifier, not a secret.</li>
    </ol>
   </details>
@@ -193,7 +193,7 @@ const DB_NAME='edge-journal-db', STORE='records', KEY='journal';
 // --- Google Drive backup config ---
 // Paste your own OAuth Client ID below (see Settings → Google Drive backup for setup steps).
 // This value is safe to leave in the file — a web OAuth Client ID is a public identifier, not a secret.
-const GOOGLE_CLIENT_ID = '';
+const GOOGLE_CLIENT_ID = '723779165266-g0r4pppv2ndo40g3d4fqfci6u9i3beod.apps.googleusercontent.com';
 const DRIVE_FILE_NAME = 'edge-journal-backup.json';
 const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 let driveAccessToken=null, driveFileId=null, driveTokenClient=null, driveSyncTimer=null, driveBusy=false;
